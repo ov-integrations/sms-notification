@@ -1,10 +1,9 @@
 import time
 from abc import ABC, abstractmethod
+from enum import Enum
 
+from curl import Curl
 from integration_log import IntegrationLog, LogLevel
-from notifqueue_api import NotifQueueApi
-from notifqueue_record import NotifQueueRecord
-from notifqueue_status import NotifQueueStatus
 
 
 class NotificationService(ABC):
@@ -88,6 +87,8 @@ class NotificationService(ABC):
                                           "Can't send [{}] notifications. All attempts have been exhausted.".format(
                                               len(prepared_notif_queue)))
 
+        self._integration_log.add_log(LogLevel.INFO.log_level_name, "Integration has been completed")
+
     @staticmethod
     def _convert_notif_queue_json_to_list(json_data):
         notif_queue = []
@@ -101,3 +102,62 @@ class NotificationService(ABC):
 
     def _prepare_notif_queue(self, notif_queue):
         return notif_queue
+
+
+class NotifQueueApi:
+    def __init__(self, service_id, url, user_name, password):
+        self._service_id = service_id
+        self._url = url
+        self._user_name = user_name
+        self._password = password
+        self._headers = {'content-type': 'application/json'}
+
+    def get_notif_queue(self):
+        url = self._url + "/api/internal/notif/queue?service_id=" + str(self._service_id)
+        curl = Curl('GET', url, headers=self._headers, auth=(self._user_name, self._password))
+        if len(curl.errors) > 0:
+            raise Exception(curl.errors)
+        return curl.jsonData
+
+    def update_notif_queue_rec_status(self, notif_queue_rec_id, status):
+        url = self._url + "/api/internal/notif/queue/" + str(notif_queue_rec_id) + "/update_status?status=" + status
+        curl = Curl('PATCH', url, headers=self._headers, auth=(self._user_name, self._password))
+        if len(curl.errors) > 0:
+            raise Exception(curl.errors)
+
+    def add_new_attempt(self, notif_queue_rec_id, error_message):
+        url = self._url + "/api/internal/notif/queue/" + str(
+            notif_queue_rec_id) + "/attempts?error_code=" + error_message
+        curl = Curl('POST', url, headers=self._headers, auth=(self._user_name, self._password))
+        if len(curl.errors) > 0:
+            raise Exception(curl.errors)
+
+    def update_notif_queue_rec_status_by_object(self, notif_queue_rec):
+        self.update_notif_queue_rec_status(notif_queue_rec.notif_queue_id, notif_queue_rec.status)
+
+
+class NotifQueueRecord:
+
+    def __init__(self, json_object):
+        self.notif_queue_id = json_object['notifQueueId']
+        self.user_id = json_object['userId']
+        self.sender = json_object['sender']
+        self.to_address = json_object['toAddress']
+        self.cc = json_object['cc']
+        self.bcc = json_object['bcc']
+        self.subj = json_object['subj']
+        self.reply_to = json_object['replyTo']
+        self.created_ts = json_object['createdTs']
+        self.status = json_object['status']
+        self.msg = json_object['msg']
+        self.html = json_object['html']
+        self.blob_data_ids = json_object['blobDataIds']
+
+
+class NotifQueueStatus(Enum):
+    BUILDING = 0
+    NOT_SENT = 1
+    SENDING = 2
+    FAIL_WILL_RETRY = 3
+    FAIL = 4
+    SUCCESS = 5
