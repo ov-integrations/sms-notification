@@ -77,8 +77,8 @@ class SmsNotifService(NotificationService):
 
             for notif_queue_rec in notif_queue:
                 for user in users:
-                    tid = user["trackor_id"]
-                    if notif_queue_rec.user_id == user["user_id"]:
+                    tid = user["trackorId"]
+                    if notif_queue_rec.user_id == user["userId"]:
                         notif_queue_rec.trackor_id = tid
                         try:
                             notif_queue_rec.phone_number = self._user_trackor.get_phone_number_by_field_name_and_trackor_id(
@@ -109,10 +109,10 @@ class UserTrackor:
         return curl.jsonData[field_name]
 
     def get_users_by_ids(self, user_ids):
-        url = self._url + "/api/v3/users?user_ids=" + str(user_ids[0])
-        user_ids.remove(user_ids[0])
-        for user_id in user_ids:
-            url = url + "&user_ids=" + str(user_id)
+        user_ids = list(set(user_ids))
+        url = self._url + "/api/internal/users?user_ids="
+        url = url + ','.join([str(user_id) for user_id in user_ids])
+
         curl = Curl('GET', url, headers=self._headers, auth=(self._username, self._password))
         if len(curl.errors) > 0:
             raise Exception(curl.errors)
