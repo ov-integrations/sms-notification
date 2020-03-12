@@ -5,7 +5,7 @@
     "serviceId" : ,
     "phoneNumberField" : "",
     "awsAccessKeyId" : "",
-    "awsSecretAccessKey" : "
+    "awsSecretAccessKey" : "",
     "maxAttempts" : ,
     "nextAttemptDelay" : ,
     "awsRegion": ""
