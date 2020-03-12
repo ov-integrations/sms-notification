@@ -1,0 +1,12 @@
+{
+    "oneVizionUrl" : "",
+    "oneVizionLogin" : "",
+    "oneVizionPwd" : "",
+    "serviceId" : ,
+    "phoneNumberField" : "",
+    "awsAccessKeyId" : "",
+    "awsSecretAccessKey" : "",
+    "maxAttempts" : ,
+    "nextAttemptDelay" : ,
+    "awsRegion": ""
+}
