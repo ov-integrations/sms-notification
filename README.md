@@ -5,7 +5,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
 
 ## Requirements
 - Python 3
-- Requests - [library for python](http://docs.python-requests.org/en/master/)
+- Requests - [library for python](https://requests.readthedocs.io/en/master/)
 - boto3 - [Boto is the Amazon Web Services (AWS) SDK for Python](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
 ## Usage
