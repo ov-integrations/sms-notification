@@ -10,20 +10,29 @@ Amazon Simple Notification Service (SNS) to send SMS.
 
 ## Usage
 1. Install this integartion 
-2. Create a new separate Notification Service
-3. Craete separate Notifications with the new Notification Service
-4. Fill the settings file of the integartion
+2. Create a new Notification Service in OneVizion. All settings of this service are ignored by Integration, use random values for required fields
+3. Install this integration
+4. Create dedicated account for integration with following privs:
+   * WEB_SERVICES R
+   * ADMIN_NOTIF_QUEUE RE
+   * ADMIN_USERS R
+   *  ADMIN_INTEGRATION_LOG RA
+   * \<User Trackor Type\> R
+   * \<User Trackor Type Tab containing phoneNumberField\> R
+5. Fill the integartion settings file:
    - oneVizionUrl - OneVizion URL
    - oneVizionLogin - OneVizion Login
    - oneVizionPwd - OneVizion Password
-   - serviceId - Notification Service ID
+   - serviceId - ID of the Notification Service createf at step 2
    - phoneNumberField - The name of the field which contains the phone number of the recepient. Recepient is a user trackor related with User ID from the Notif Queue record.
    - awsAccessKeyId - AWS Access Key ID
    - awsSecretAccessKey - AWS Secret Access Key
    - maxAttempts - The number of attempts to send SMS
    - nextAttemptDelay - The delay in seconds before the next SMS sending after an unsuccessful attempt
    - awsRegion - AWS Region. [AWS SNS Regions](https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html)
-5. Enable the integartion
+6. Enable the integartion
+
+To get SMS notifications select newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
 
 Example of settings.json
 
