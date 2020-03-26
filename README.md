@@ -9,17 +9,16 @@ Amazon Simple Notification Service (SNS) to send SMS.
 - boto3 - [Boto is the Amazon Web Services (AWS) SDK for Python](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
 ## Usage
-1. Install this integartion 
-2. Create a new Notification Service in OneVizion. All settings of this service are ignored by Integration, use random values for required fields
-3. Install this integration
-4. Create dedicated account for integration with following privs:
+1. Create a new Notification Service in OneVizion. All settings of this service are ignored by Integration, use random values for required fields
+2. Install this integration
+3. Create dedicated account for integration with following privs:
    * WEB_SERVICES R
    * ADMIN_NOTIF_QUEUE RE
    * ADMIN_USERS R
    *  ADMIN_INTEGRATION_LOG RA
    * \<User Trackor Type\> R
    * \<User Trackor Type Tab containing phoneNumberField\> R
-5. Fill the integartion settings file:
+4. Fill the integartion settings file:
    - oneVizionUrl - OneVizion URL
    - oneVizionLogin - OneVizion Login
    - oneVizionPwd - OneVizion Password
@@ -30,7 +29,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
    - maxAttempts - The number of attempts to send SMS
    - nextAttemptDelay - The delay in seconds before the next SMS sending after an unsuccessful attempt
    - awsRegion - AWS Region. [AWS SNS Regions](https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html)
-6. Enable the integartion
+5. Enable the integartion
 
 To get SMS notifications select newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
 
