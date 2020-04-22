@@ -8,6 +8,14 @@ Amazon Simple Notification Service (SNS) to send SMS.
 - Requests - [library for python](https://requests.readthedocs.io/en/master/)
 - boto3 - [Boto is the Amazon Web Services (AWS) SDK for Python](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 
+## AWS Configuration
+1. Log into AWS console
+2. Create an IAM policy using SNSPublishSMSOnly.json
+3. Create an IAM user and store credentials
+4. Attach this new profile to the user
+5. In SNS section, choose Text messaging (SMS) and change default message type from Promotional to Transactional
+
+
 ## Usage
 1. Create a new Notification Service in OneVizion. All settings of this service are ignored by Integration, use random values for required fields
 2. Install this integration
