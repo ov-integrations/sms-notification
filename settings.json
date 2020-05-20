@@ -8,5 +8,5 @@
     "awsSecretAccessKey" : "",
     "maxAttempts" : ,
     "nextAttemptDelay" : ,
-    "awsRegion": ""
+    "awsRegion": "us-east-1"
 }
