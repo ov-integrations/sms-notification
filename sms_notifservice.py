@@ -33,7 +33,7 @@ class SmsNotifService(NotificationService):
             attachments = attachments + self._url + "/efiles/EFileGetBlobFromDb.do?id=" + str(blob_id) + " "
 
         msg = notif_queue_record.subj + " " + notif_queue_record.msg + " " + self._url.replace("https://", "")
-        if len(attachments) > 0:
+        if len(notif_queue_record.blob_data_ids) > 0:
             msg = msg + " " + attachments
 
         self._integration_log.add_log(LogLevel.INFO.log_level_name,
