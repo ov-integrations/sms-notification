@@ -36,13 +36,26 @@ class SmsNotifService(NotificationService):
         if len(notif_queue_record.blob_data_ids) > 0:
             msg = msg + " " + attachments
 
+        # Clean up phone number
+        phone_number = notif_queue_record.phone_number
+        phone_number = phone_number.replace('-','')
+        phone_number = phone_number.replace('(','').replace(')','')
+        if phone_number[0] != '+' :
+            phone_number = "+1" + phone_number
+
         self._integration_log.add_log(LogLevel.INFO.log_level_name,
-                                      "Sending SMS to [{}] phone number".format(notif_queue_record.phone_number),
+                                      "Sending SMS to [{}] phone number".format(phone_number),
                                       "Message Text: [{}]".format(msg))
         # Send your sms message.
         response = self._client.publish(
-            PhoneNumber=notif_queue_record.phone_number,
-            Message=msg
+            PhoneNumber=phone_number,
+            Message=msg,
+            MessageAttributes = {
+                'AWS.SNS.SMS.SMSType': {
+                       'DataType': 'String',
+                       'StringValue': 'Transactional'
+                   }
+                }
         )
 
         self._integration_log.add_log(LogLevel.DEBUG.log_level_name,
