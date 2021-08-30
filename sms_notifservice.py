@@ -10,18 +10,23 @@ class SmsNotifService(NotificationService):
     def __init__(self, service_id, process_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
                  secret_access_key, aws_region, max_attempts=1, next_attempt_delay=30):
         super().__init__(service_id, process_id, ov_url, ov_username, ov_pwd, max_attempts, next_attempt_delay)
-        self._access_key_id = access_key_id
-        self._secret_access_key = secret_access_key
-        self._aws_region = aws_region
         self._phone_number_field_name = phone_number_field_name
         self._user_trackor = UserTrackor(ov_url, ov_username, ov_pwd)
         self._url = ov_url
-        self._client = boto3.client(
-            "sns",
-            aws_access_key_id=self._access_key_id,
-            aws_secret_access_key=self._secret_access_key,
-            region_name=self._aws_region
-        )
+        self._client = self._create_client(access_key_id, secret_access_key, aws_region)
+
+    def _create_client(self, access_key_id, secret_access_key, aws_region):
+        if aws_region == "test":
+            self._integration_log.add_log(LogLevel.WARNING.log_level_name,
+                                          "Warning! The stub is used instead of the real client for sending SMS")
+            return ProxyClient()
+        else:
+            return boto3.client(
+                "sns",
+                aws_access_key_id=access_key_id,
+                aws_secret_access_key=secret_access_key,
+                region_name=aws_region
+            )
 
     def send_notification(self, notif_queue_record):
         if not (hasattr(notif_queue_record, 'phone_number')) or notif_queue_record.phone_number is None:
@@ -130,3 +135,9 @@ class UserTrackor:
         if len(curl.errors) > 0:
             raise Exception(curl.errors)
         return curl.jsonData
+
+
+class ProxyClient:
+
+    def publish(self, **kwargs):
+        return {"ResponseMetadata": {"HTTPStatusCode": 203}}
