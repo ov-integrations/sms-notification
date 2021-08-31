@@ -19,7 +19,7 @@ class SmsNotifService(NotificationService):
         if aws_region == "test":
             self._integration_log.add_log(LogLevel.WARNING.log_level_name,
                                           "Warning! The stub is used instead of the real client for sending SMS")
-            return ProxyClient()
+            return StubClient()
         else:
             return boto3.client(
                 "sns",
@@ -137,7 +137,7 @@ class UserTrackor:
         return curl.jsonData
 
 
-class ProxyClient:
+class StubClient:
 
     def publish(self, **kwargs):
         return {"ResponseMetadata": {"HTTPStatusCode": 203}}
