@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><COMPONENTS author="sms-notification_Vadim.Glebov" description="" name="components.xml" site="https&#x3a;&#x2f;&#x2f;integrations.onevizion.com" ts="" ><RULES>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>TEST_INTEGRATION_SMS_NOTIFICATION</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>100006663</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>120</RULE_TYPE_ID>
+   <RULE_TYPE>Before Integration Start</RULE_TYPE>
+   <ID_FIELD>INTEGRATION_RUN_ID</ID_FIELD>
+   <TEMPLATE_SQL>select integration_id as &quot;id&quot;, integration_name as &quot;Integration Name&quot;, integration_id as &quot;Integration ID&quot; from integration</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6499</APP_LABEL_ID>
+     <LABEL_TEXT>Integration Start (Before)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6499</APP_LABEL_ID>
+     <LABEL_TEXT>Integration Start (Before)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6499</APP_LABEL_ID>
+     <LABEL_TEXT>Integration Start (Before)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6500</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when an Integration is started</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6500</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when an Integration is started</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6500</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when an Integration is started</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>declare
+    c_message_title constant varchar(100) := &apos;Test Title&apos;;
+    c_message_body constant varchar(100) := &apos;Test Body&apos;;
+    c_notif_service_id number := 1000080;
+    c_user_id number := 100165299;
+    
+begin
+    util.SendNotification(c_message_title, c_message_body, c_user_id, &apos;text&apos;, c_notif_service_id);
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>10000616311</ITEM_ID>
+    <PKEY>100006663</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1002377</PROGRAM_ID>
+    <NAME>TEST_INTEGRATION_SMS_NOTIFICATION</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1002377</PROGRAM_ID>
+  <RULE_TYPE_ID>120</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>100006663</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>101283</COMPONENTS_PACKAGE_ID>
+    <NAME>SMS_NOTIFICATION_TEST</NAME>
+    <PROGRAM_ID>1002377</PROGRAM_ID>
+    <BPD_ITEMS/>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+ <RULES_ITEM>
+  <IS_ASYNC>0</IS_ASYNC>
+  <IS_ENABLED>1</IS_ENABLED>
+  <RULE>TEST_INTEGRATION_SMS_NOTIFICATION_RESULTS</RULE>
+  <RULE_CLASS_ID>1</RULE_CLASS_ID>
+  <RULE_ID>100006664</RULE_ID>
+  <RULE_TYPE>
+   <RULE_TYPE_ID>121</RULE_TYPE_ID>
+   <RULE_TYPE>After Integration Complete</RULE_TYPE>
+   <ID_FIELD>INTEGRATION_RUN_ID</ID_FIELD>
+   <TEMPLATE_SQL>select integration_id as &quot;id&quot;, integration_name as &quot;Integration Name&quot;, integration_id as &quot;Integration ID&quot; from integration</TEMPLATE_SQL>
+   <TYPE_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6501</APP_LABEL_ID>
+     <LABEL_TEXT>Integration Complete (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6501</APP_LABEL_ID>
+     <LABEL_TEXT>Integration Complete (After)</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6501</APP_LABEL_ID>
+     <LABEL_TEXT>Integration Complete (After)</LABEL_TEXT>
+    </T_LABEL>
+   </TYPE_LABELS>
+   <DESC_LABELS>
+    <T_LABEL>
+     <APP_LANG_ID>0</APP_LANG_ID>
+     <APP_LABEL_ID>6502</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when an Integration is finished</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>1</APP_LANG_ID>
+     <APP_LABEL_ID>6502</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when an Integration is finished</LABEL_TEXT>
+    </T_LABEL>
+    <T_LABEL>
+     <APP_LANG_ID>5</APP_LANG_ID>
+     <APP_LABEL_ID>6502</APP_LABEL_ID>
+     <LABEL_TEXT>Executed when an Integration is finished</LABEL_TEXT>
+    </T_LABEL>
+   </DESC_LABELS>
+  </RULE_TYPE>
+  <SQL_TEXT>declare 
+    c_process_success_status_id constant number := 2; /*Executed without Errors*/
+    c_queue_success_status_id constant number := 5; /*Sent successfully*/
+    c_service_id constant number := 1000080;
+    
+    v_integration_id number;
+    v_integration_name varchar2(250);
+    v_error varchar2(150);
+    v_process_status_id number;
+    v_notif_queue_count number;
+    
+begin
+    select p.status_id
+      into v_process_status_id
+      from integration_run ir
+      join process p on (ir.process_id = p.process_id)
+     where ir.integration_run_id = :INTEGRATION_RUN_ID;
+        
+    if v_process_status_id &lt;&gt; c_process_success_status_id then
+        v_error := &apos;The Integration has been executed with errors&apos; || chr(10);
+    end if;
+    
+    select i.integration_id, i.integration_name
+      into v_integration_id, v_integration_name
+      from integration_run ir
+      join integration i on (ir.integration_id = i.integration_id)
+     where ir.integration_run_id = :INTEGRATION_RUN_ID;
+    
+    select count(notif_queue_id)
+      into v_notif_queue_count
+      from notif_queue
+     where notif_service_id = c_service_id
+       and created_ts between current_date - 2/24 and current_date;
+       
+    if v_notif_queue_count = 0 then
+        v_error := v_error || &apos;Notifications not found&apos; || chr(10);
+    else
+        select count(notif_queue_id)
+          into v_notif_queue_count
+          from notif_queue
+         where notif_service_id = c_service_id
+           and created_ts between current_date - 2/24 and current_date
+           and queue_status_id &lt;&gt; c_queue_success_status_id;
+       
+        if v_notif_queue_count &lt;&gt; 0 then
+            v_error := v_error || &apos;Notifications not sent&apos; || chr(10);
+        end if;
+    end if;
+       
+    if v_error is null then
+        pkg_test_integration.test_succeed(v_integration_name, :INTEGRATION_RUN_ID);
+    else
+        pkg_test_integration.test_failed(v_integration_name, v_error, null, :INTEGRATION_RUN_ID);
+    end if;
+end;</SQL_TEXT>
+  <WARNING_LABEL/>
+  <RULE_CLASS_PARAM_VALS/>
+  <RULE_HTTPCALLS/>
+  <RULE_HTTPCALL_PARAMS/>
+  <BPD_ITEMS>
+   <T_BPD_ITEM>
+    <ITEM_ID>10000616312</ITEM_ID>
+    <PKEY>100006664</PKEY>
+    <ITEM_TYPE_ID>9</ITEM_TYPE_ID>
+    <ITEM_STATUS_ID>1</ITEM_STATUS_ID>
+    <BLOB_DATA/>
+    <PROGRAM_ID>1002377</PROGRAM_ID>
+    <NAME>TEST_INTEGRATION_SMS_NOTIFICATION_RESULTS</NAME>
+    <APP_LABEL/>
+   </T_BPD_ITEM>
+  </BPD_ITEMS>
+  <RULE_GEOCODING/>
+  <RULE_MAP_SNIPPETS/>
+  <PROGRAM_ID>1002377</PROGRAM_ID>
+  <RULE_TYPE_ID>121</RULE_TYPE_ID>
+  <RULE_TOWER_GROUPS/>
+  <COMPONENT_PACKAGES>
+   <T_BPL_COMP_PKG>
+    <COMPONENT_ID>4</COMPONENT_ID>
+    <OBJECT_ID>100006664</OBJECT_ID>
+    <COMPONENTS_PACKAGE_ID>101283</COMPONENTS_PACKAGE_ID>
+    <NAME>SMS_NOTIFICATION_TEST</NAME>
+    <PROGRAM_ID>1002377</PROGRAM_ID>
+    <BPD_ITEMS/>
+   </T_BPL_COMP_PKG>
+  </COMPONENT_PACKAGES>
+  <CONFIG_FIELD_IDNUMS/>
+  <TASK_DATE_IDNUMS/>
+  <TASK_IDNUMS/>
+  <TRACKOR_TYPE_IDNUMS/>
+  <RELATION_TYPE_IDNUMS/>
+  <WP_TEMPLATE_IDNUMS/>
+  <WF_TEMPLATE_IDNUMS/>
+  <IMPORT_IDNUMS/>
+  <REPORT_IDNUMS/>
+  <COMPONENT_LABELS/>
+ </RULES_ITEM>
+</RULES>
+</COMPONENTS>
