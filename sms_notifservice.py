@@ -5,7 +5,7 @@ from curl import Curl
 from onevizion import NotificationService, LogLevel
 
 
-class SmsNotifService(NotificationService, ABC):
+class SmsNotifService(NotificationService):
 
     def __init__(self, service_id, process_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
                  secret_access_key, aws_region, max_attempts=1, next_attempt_delay=30):
@@ -28,7 +28,7 @@ class SmsNotifService(NotificationService, ABC):
                 region_name=aws_region
             )
 
-    def send_notification(self, notif_queue_record):
+    def sendNotification(self, notif_queue_record):
         if not (hasattr(notif_queue_record, 'phone_number')) or notif_queue_record.phone_number is None:
             raise Exception(
                 "Notif Queue Record with ID [{}] has no phone number".format(notif_queue_record.notif_queue_id))
@@ -78,7 +78,7 @@ class SmsNotifService(NotificationService, ABC):
                                      "Response: [{}]".format(response))
             raise Exception("Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code))
 
-    def _prepare_notif_queue(self, notif_queue):
+    def _prepareNotifQueue(self, notif_queue):
         user_ids = list(map(lambda rec: rec.user_id, notif_queue))
         if None in user_ids:
             for notif_queue_rec in notif_queue:
