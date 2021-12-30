@@ -1,11 +1,11 @@
+from abc import ABC
+
 import boto3
-
 from curl import Curl
-from integration_log import LogLevel
-from notifservice import NotificationService
+from onevizion import NotificationService, LogLevel
 
 
-class SmsNotifService(NotificationService):
+class SmsNotifService(NotificationService, ABC):
 
     def __init__(self, service_id, process_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
                  secret_access_key, aws_region, max_attempts=1, next_attempt_delay=30):
@@ -17,8 +17,8 @@ class SmsNotifService(NotificationService):
 
     def _create_client(self, access_key_id, secret_access_key, aws_region):
         if aws_region == "test":
-            self._integration_log.add_log(LogLevel.WARNING.log_level_name,
-                                          "Warning! The stub is used instead of the real client for sending SMS")
+            self._integrationLog.add(LogLevel.WARNING,
+                                     "Warning! The stub is used instead of the real client for sending SMS")
             return StubClient()
         else:
             return boto3.client(
@@ -43,41 +43,39 @@ class SmsNotifService(NotificationService):
 
         # Clean up phone number
         phone_number = notif_queue_record.phone_number
-        phone_number = phone_number.replace('-','')
-        phone_number = phone_number.replace('(','').replace(')','')
-        if phone_number[0] != '+' :
+        phone_number = phone_number.replace('-', '')
+        phone_number = phone_number.replace('(', '').replace(')', '')
+        if phone_number[0] != '+':
             phone_number = "+1" + phone_number
 
-        self._integration_log.add_log(LogLevel.INFO.log_level_name,
-                                      "Sending SMS to [{}] phone number".format(phone_number),
-                                      "Message Text: [{}]".format(msg))
+        self._integrationLog.add(LogLevel.INFO,
+                                 "Sending SMS to [{}] phone number".format(phone_number),
+                                 "Message Text: [{}]".format(msg))
         # Send your sms message.
         response = self._client.publish(
             PhoneNumber=phone_number,
             Message=msg,
-            MessageAttributes = {
+            MessageAttributes={
                 'AWS.SNS.SMS.SMSType': {
-                       'DataType': 'String',
-                       'StringValue': 'Transactional'
-                   }
+                    'DataType': 'String',
+                    'StringValue': 'Transactional'
                 }
+            }
         )
 
-        self._integration_log.add_log(LogLevel.DEBUG.log_level_name,
-                                      "Received response from SNS",
-                                      "Response: [{}]".format(response))
+        self._integrationLog.add(LogLevel.DEBUG,
+                                 "Received response from SNS",
+                                 "Response: [{}]".format(response))
         try:
             http_status_code = int(response["ResponseMetadata"]["HTTPStatusCode"])
         except Exception as e:
-            self._integration_log.add_log(LogLevel.ERROR.log_level_name,
-                                          "Incorrect response from SNS",
-                                          response)
+            self._integrationLog.add(LogLevel.ERROR, "Incorrect response from SNS", response)
             raise Exception("Incorrect response from SNS") from e
 
         if http_status_code >= 400:
-            self._integration_log.add_log(LogLevel.ERROR.log_level_name,
-                                          "Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code),
-                                          "Response: [{}]".format(response))
+            self._integrationLog.add(LogLevel.ERROR,
+                                     "Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code),
+                                     "Response: [{}]".format(response))
             raise Exception("Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code))
 
     def _prepare_notif_queue(self, notif_queue):
@@ -85,9 +83,9 @@ class SmsNotifService(NotificationService):
         if None in user_ids:
             for notif_queue_rec in notif_queue:
                 if notif_queue_rec.user_id is None:
-                    self._integration_log.add_log(LogLevel.ERROR.log_level_name,
-                                                  "Notif Queue Record doesn't have User ID. Notif Queue ID: [{}]".format(
-                                                      str(notif_queue_rec.notif_queue_id)))
+                    self._integrationLog.add(LogLevel.ERROR,
+                                             "Notif Queue Record doesn't have User ID. Notif Queue ID: [{}]".format(
+                                                 str(notif_queue_rec.notif_queue_id)))
             user_ids = [user_id for user_id in user_ids if user_id]
 
         if len(user_ids) > 0:
@@ -103,10 +101,8 @@ class SmsNotifService(NotificationService):
                                 self._phone_number_field_name,
                                 tid)
                         except Exception as e:
-                            self._integration_log.add_log(LogLevel.ERROR.log_level_name,
-                                                          "Can't get Phone Number from User Trackor. Notif Queue ID = [{}]".format(
-                                                              str(notif_queue_rec.notif_queue_id)),
-                                                          str(e))
+                            self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. Notif "
+                                                                     "Queue ID = [{}]".format(str(notif_queue_rec.notif_queue_id)), str(e))
 
         return notif_queue
 
