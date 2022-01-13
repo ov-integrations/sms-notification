@@ -79,7 +79,7 @@ class SmsNotifService(NotificationService):
             raise Exception("Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code))
 
     def _prepareNotifQueue(self, notif_queue):
-        user_ids = list(map(lambda rec: rec.user_id, notif_queue))
+        user_ids = list(map(lambda rec: rec.userId, notif_queue))
         if None in user_ids:
             for notif_queue_rec in notif_queue:
                 if notif_queue_rec.userId is None:
