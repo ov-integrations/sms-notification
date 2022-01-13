@@ -8,10 +8,12 @@ from onevizion import NotificationService, LogLevel
 class SmsNotifService(NotificationService):
 
     def __init__(self, service_id, process_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
-                 secret_access_key, aws_region, max_attempts=1, next_attempt_delay=30):
-        super().__init__(service_id, process_id, ov_url, ov_username, ov_pwd, max_attempts, next_attempt_delay)
+                 secret_access_key, aws_region, log_level, max_attempts=1, next_attempt_delay=30):
+        super().__init__(serviceId=service_id, processId=process_id, URL=ov_url, userName=ov_username, password=ov_pwd,
+                         logLevel=log_level, maxAttempts=max_attempts, nextAttemptDelay=next_attempt_delay)
+        self._url = "https://" + ov_url
         self._phone_number_field_name = phone_number_field_name
-        self._user_trackor = UserTrackor(ov_url, ov_username, ov_pwd)
+        self._user_trackor = UserTrackor(self._url, ov_username, ov_pwd)
         self._url = ov_url
         self._client = self._create_client(access_key_id, secret_access_key, aws_region)
 
