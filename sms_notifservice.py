@@ -1,5 +1,3 @@
-from abc import ABC
-
 import boto3
 from curl import Curl
 from onevizion import NotificationService, LogLevel
@@ -33,14 +31,14 @@ class SmsNotifService(NotificationService):
     def sendNotification(self, notif_queue_record):
         if not (hasattr(notif_queue_record, 'phone_number')) or notif_queue_record.phone_number is None:
             raise Exception(
-                "Notif Queue Record with ID [{}] has no phone number".format(notif_queue_record.notif_queue_id))
+                "Notif Queue Record with ID [{}] has no phone number".format(notif_queue_record.notifQueueId))
 
         attachments = "Attachments: "
-        for blob_id in notif_queue_record.blob_data_ids:
+        for blob_id in notif_queue_record.blobDataIds:
             attachments = attachments + self._url + "/efiles/EFileGetBlobFromDb.do?id=" + str(blob_id) + " "
 
         msg = notif_queue_record.subj + " " + notif_queue_record.msg + " " + self._url.replace("https://", "")
-        if len(notif_queue_record.blob_data_ids) > 0:
+        if len(notif_queue_record.blobDataIds) > 0:
             msg = msg + " " + attachments
 
         # Clean up phone number
@@ -84,10 +82,10 @@ class SmsNotifService(NotificationService):
         user_ids = list(map(lambda rec: rec.user_id, notif_queue))
         if None in user_ids:
             for notif_queue_rec in notif_queue:
-                if notif_queue_rec.user_id is None:
+                if notif_queue_rec.userId is None:
                     self._integrationLog.add(LogLevel.ERROR,
                                              "Notif Queue Record doesn't have User ID. Notif Queue ID: [{}]".format(
-                                                 str(notif_queue_rec.notif_queue_id)))
+                                                 str(notif_queue_rec.notifQueueId)))
             user_ids = [user_id for user_id in user_ids if user_id]
 
         if len(user_ids) > 0:
@@ -96,7 +94,7 @@ class SmsNotifService(NotificationService):
             for notif_queue_rec in notif_queue:
                 for user in users:
                     tid = user["trackorId"]
-                    if notif_queue_rec.user_id == user["userId"]:
+                    if notif_queue_rec.userId == user["userId"]:
                         notif_queue_rec.trackor_id = tid
                         try:
                             notif_queue_rec.phone_number = self._user_trackor.get_phone_number_by_field_name_and_trackor_id(
@@ -104,7 +102,7 @@ class SmsNotifService(NotificationService):
                                 tid)
                         except Exception as e:
                             self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. Notif "
-                                                                     "Queue ID = [{}]".format(str(notif_queue_rec.notif_queue_id)), str(e))
+                                                                     "Queue ID = [{}]".format(str(notif_queue_rec.notifQueueId)), str(e))
 
         return notif_queue
 
