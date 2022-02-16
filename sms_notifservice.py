@@ -1,18 +1,37 @@
 import boto3
-from curl import Curl
 from onevizion import NotificationService, LogLevel
+
+from curl import Curl
+
+HTTPS = "https://"
+HTTP = "http://"
+
+
+def get_scheme_url(url):
+    if url.startswith(HTTPS) or url.startswith(HTTP):
+        return url
+    else:
+        return HTTPS + url
+
+
+def get_url_without_scheme(url):
+    if url.startswith(HTTPS) or url.startswith(HTTP):
+        return url.replace(HTTPS, "").replace(HTTP, "")
+    else:
+        return url
 
 
 class SmsNotifService(NotificationService):
 
-    def __init__(self, service_id, process_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
-                 secret_access_key, aws_region, log_level, max_attempts=1, next_attempt_delay=30):
-        super().__init__(serviceId=service_id, processId=process_id, URL=ov_url, userName=ov_username, password=ov_pwd,
-                         logLevel=log_level, maxAttempts=max_attempts, nextAttemptDelay=next_attempt_delay)
-        self._url = "https://" + ov_url
+    def __init__(self, service_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
+                 secret_access_key, aws_region, max_attempts, next_attempt_delay, process_id, log_level):
+        super().__init__(serviceId=service_id, processId=process_id, URL=get_url_without_scheme(ov_url),
+                         userName=ov_username, password=ov_pwd, logLevel=log_level, maxAttempts=max_attempts,
+                         nextAttemptDelay=next_attempt_delay)
+        self._url = get_url_without_scheme(ov_url)
+        self._scheme_url = get_scheme_url(ov_url)
         self._phone_number_field_name = phone_number_field_name
-        self._user_trackor = UserTrackor(self._url, ov_username, ov_pwd)
-        self._url = ov_url
+        self._user_trackor = UserTrackor(self._scheme_url, ov_username, ov_pwd)
         self._client = self._create_client(access_key_id, secret_access_key, aws_region)
 
     def _create_client(self, access_key_id, secret_access_key, aws_region):
@@ -35,9 +54,9 @@ class SmsNotifService(NotificationService):
 
         attachments = "Attachments: "
         for blob_id in notif_queue_record.blobDataIds:
-            attachments = attachments + self._url + "/efiles/EFileGetBlobFromDb.do?id=" + str(blob_id) + " "
+            attachments = attachments + self._scheme_url + "/efiles/EFileGetBlobFromDb.do?id=" + str(blob_id) + " "
 
-        msg = notif_queue_record.subj + " " + notif_queue_record.msg + " " + self._url.replace("https://", "")
+        msg = notif_queue_record.subj + " " + notif_queue_record.msg + " " + self._url
         if len(notif_queue_record.blobDataIds) > 0:
             msg = msg + " " + attachments
 

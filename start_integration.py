@@ -1,10 +1,9 @@
-import sys
 import subprocess
+import sys
 
 subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'python_dependencies.txt'])
 
 import json
-
 from sms_notifservice import SmsNotifService
 
 with open('settings.json', "rb") as SFile:
@@ -29,7 +28,7 @@ with open('ihub_parameters.json', "rb") as PFile:
 process_id = ihub_data['processId']
 log_level = ihub_data['logLevel']
 
-notification_service = SmsNotifService(service_id, process_id, ov_url, ov_login, ov_pwd, phone_number_field,
-                                       awsAccessKeyId, awsSecretAccessKey, awsRegion, log_level, max_attempts,
-                                       next_attempt_delay)
+notification_service = SmsNotifService(service_id, ov_url, ov_login, ov_pwd, phone_number_field,
+                                       awsAccessKeyId, awsSecretAccessKey, awsRegion, max_attempts,
+                                       next_attempt_delay, process_id, log_level)
 notification_service.start()
