@@ -25,9 +25,9 @@ class SmsNotifService(NotificationService):
 
     def __init__(self, service_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
                  secret_access_key, aws_region, max_attempts, next_attempt_delay, process_id, log_level):
-        super().__init__(serviceId=service_id, processId=process_id, URL=get_url_without_scheme(ov_url),
-                         userName=ov_username, password=ov_pwd, logLevel=log_level, maxAttempts=max_attempts,
-                         nextAttemptDelay=next_attempt_delay)
+        super().__init__(serviceId=service_id, URL=get_url_without_scheme(ov_url), userName=ov_username,
+                         password=ov_pwd, maxAttempts=max_attempts, nextAttemptDelay=next_attempt_delay,
+                         processId=process_id, logLevel=log_level)
         self._url = get_url_without_scheme(ov_url)
         self._scheme_url = get_scheme_url(ov_url)
         self._phone_number_field_name = phone_number_field_name
