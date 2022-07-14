@@ -13,7 +13,7 @@ ov_url = pwd_data["oneVizionUrl"]
 ov_login = pwd_data["oneVizionLogin"]
 ov_pwd = pwd_data["oneVizionPwd"]
 service_id = pwd_data["serviceId"]
-phone_number_field = pwd_data["phoneNumberField"]
+phone_number_field = pwd_data["phoneNumberField"] if "phoneNumberField" in pwd_data else ""
 
 awsAccessKeyId = pwd_data["awsAccessKeyId"]
 awsSecretAccessKey = pwd_data["awsSecretAccessKey"]

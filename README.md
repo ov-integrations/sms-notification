@@ -31,7 +31,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
    - oneVizionLogin - OneVizion Login
    - oneVizionPwd - OneVizion Password
    - serviceId - ID of the Notification Service created at step 2
-   - phoneNumberField - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record.
+   - phoneNumberField - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record. To use the User Phone Number from the User Settings, this parameter should be removed.
    - awsAccessKeyId - AWS Access Key ID
    - awsSecretAccessKey - AWS Secret Access Key
    - maxAttempts - The number of attempts to send SMS

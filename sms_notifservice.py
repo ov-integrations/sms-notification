@@ -112,16 +112,20 @@ class SmsNotifService(NotificationService):
 
             for notif_queue_rec in notif_queue:
                 for user in users:
-                    tid = user["trackorId"]
                     if notif_queue_rec.userId == user["userId"]:
-                        notif_queue_rec.trackor_id = tid
-                        try:
-                            notif_queue_rec.phone_number = self._user_trackor.get_phone_number_by_field_name_and_trackor_id(
-                                self._phone_number_field_name,
-                                tid)
-                        except Exception as e:
-                            self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. Notif "
-                                                                     "Queue ID = [{}]".format(str(notif_queue_rec.notifQueueId)), str(e))
+                        if self._phone_number_field_name:
+                            tid = user["trackorId"]
+                            notif_queue_rec.trackor_id = tid
+                            try:
+                                notif_queue_rec.phone_number = self._user_trackor.get_phone_number_by_field_name_and_trackor_id(
+                                    self._phone_number_field_name,
+                                    tid)
+                            except Exception as e:
+                                self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. Notif "
+                                                                        "Queue ID = [{}]".format(str(notif_queue_rec.notifQueueId)), str(e))
+                        else:
+                            notif_queue_rec.phone_number = user["phoneNumber"]
+
 
         return notif_queue
 
