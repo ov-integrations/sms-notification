@@ -10,8 +10,8 @@ with open('settings.json', "rb") as SFile:
     pwd_data = json.loads(SFile.read().decode('utf-8'))
 
 ov_url = pwd_data["oneVizionUrl"]
-ov_login = pwd_data["oneVizionLogin"]
-ov_pwd = pwd_data["oneVizionPwd"]
+ov_access_key = pwd_data["oneVizionAccessKey"]
+ov_secret_key = pwd_data["oneVizionSecretKey"]
 service_id = pwd_data["serviceId"]
 phone_number_field = pwd_data["phoneNumberField"]
 
@@ -28,7 +28,7 @@ with open('ihub_parameters.json', "rb") as PFile:
 process_id = ihub_data['processId']
 log_level = ihub_data['logLevel']
 
-notification_service = SmsNotifService(service_id, ov_url, ov_login, ov_pwd, phone_number_field,
+notification_service = SmsNotifService(service_id, ov_url, ov_access_key, ov_secret_key, phone_number_field,
                                        awsAccessKeyId, awsSecretAccessKey, awsRegion, max_attempts,
                                        next_attempt_delay, process_id, log_level)
 notification_service.start()

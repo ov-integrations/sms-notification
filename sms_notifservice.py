@@ -1,5 +1,5 @@
 import boto3
-from onevizion import NotificationService, LogLevel
+from onevizion import NotificationService, LogLevel, HTTPBearerAuth
 
 from curl import Curl
 
@@ -23,16 +23,16 @@ def get_url_without_scheme(url):
 
 class SmsNotifService(NotificationService):
 
-    def __init__(self, service_id, ov_url, ov_username, ov_pwd, phone_number_field_name, access_key_id,
-                 secret_access_key, aws_region, max_attempts, next_attempt_delay, process_id, log_level):
-        super().__init__(serviceId=service_id, URL=get_url_without_scheme(ov_url), userName=ov_username,
-                         password=ov_pwd, maxAttempts=max_attempts, nextAttemptDelay=next_attempt_delay,
+    def __init__(self, service_id, ov_url, ov_access_key, ov_secret_key, phone_number_field_name, aws_access_key_id,
+                 aws_secret_access_key, aws_region, max_attempts, next_attempt_delay, process_id, log_level):
+        super().__init__(serviceId=service_id, URL=get_url_without_scheme(ov_url), userName=ov_access_key,
+                         password=ov_secret_key, isTokenAuth=True, maxAttempts=max_attempts, nextAttemptDelay=next_attempt_delay,
                          processId=process_id, logLevel=log_level)
         self._url = get_url_without_scheme(ov_url)
         self._scheme_url = get_scheme_url(ov_url)
         self._phone_number_field_name = phone_number_field_name
-        self._user_trackor = UserTrackor(self._scheme_url, ov_username, ov_pwd)
-        self._client = self._create_client(access_key_id, secret_access_key, aws_region)
+        self._user_trackor = UserTrackor(self._scheme_url, ov_access_key, ov_secret_key)
+        self._client = self._create_client(aws_access_key_id, aws_secret_access_key, aws_region)
 
     def _create_client(self, access_key_id, secret_access_key, aws_region):
         if aws_region == "test":
@@ -128,15 +128,14 @@ class SmsNotifService(NotificationService):
 
 class UserTrackor:
 
-    def __init__(self, url, username, password):
+    def __init__(self, url, access_key, secret_key):
         self._url = url
-        self._username = username
-        self._password = password
+        self._auth = HTTPBearerAuth(access_key, secret_key)
         self._headers = {'content-type': 'application/json'}
 
     def get_phone_number_by_field_name_and_trackor_id(self, field_name, tid):
         url = self._url + "/api/v3/trackors/" + str(tid) + "?fields=" + field_name
-        curl = Curl('GET', url, headers=self._headers, auth=(self._username, self._password))
+        curl = Curl('GET', url, headers=self._headers, auth=self._auth)
         if len(curl.errors) > 0:
             raise Exception(curl.errors)
         return curl.jsonData[field_name]
@@ -146,7 +145,7 @@ class UserTrackor:
         url = self._url + "/api/internal/users?user_ids="
         url = url + ','.join([str(user_id) for user_id in user_ids])
 
-        curl = Curl('GET', url, headers=self._headers, auth=(self._username, self._password))
+        curl = Curl('GET', url, headers=self._headers, auth=self._auth)
         if len(curl.errors) > 0:
             raise Exception(curl.errors)
         return curl.jsonData
