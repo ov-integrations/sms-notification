@@ -6,6 +6,7 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install', '-r', 'python_dep
 import json
 from jsonschema import validate
 from sms_notifservice import SmsNotifService
+from integration_error import IntegrationError
 
 with open('settings.json', "rb") as SFile:
     pwd_data = json.loads(SFile.read().decode('utf-8'))
@@ -16,7 +17,7 @@ with open('settings_schema.json', "rb") as SFile:
 try:
     validate(instance=pwd_data, schema=data_schema)
 except Exception as e:
-    raise Exception("Incorrect value in the settings file\n{}".format(str(e)))
+    raise IntegrationError("Incorrect value in the settings file\n{}".format(str(e)))
 
 ov_url = pwd_data["oneVizionUrl"]
 ov_login = pwd_data["oneVizionLogin"]
