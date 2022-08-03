@@ -23,15 +23,18 @@ Amazon Simple Notification Service (SNS) to send SMS.
    * WEB_SERVICES R
    * ADMIN_NOTIF_QUEUE RE
    * ADMIN_USERS R
-   *  ADMIN_INTEGRATION_LOG RA
+   * ADMIN_INTEGRATION_LOG RA
+   
+   Required privs if phoneNumberField is used:
    * \<User Trackor Type\> R
    * \<User Trackor Type Tab containing phoneNumberField\> R
+
 4. Fill the integration settings file:
    - oneVizionUrl - OneVizion URL
    - oneVizionLogin - OneVizion Login
    - oneVizionPwd - OneVizion Password
    - serviceId - ID of the Notification Service created at step 2
-   - phoneNumberField - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record. To use the User Phone Number from the User Settings, this parameter should be removed.
+   - phoneNumberField (Optional. Needed when there are no phones numbers in User Settings) - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record.
    - awsAccessKeyId - AWS Access Key ID
    - awsSecretAccessKey - AWS Secret Access Key
    - maxAttempts - The number of attempts to send SMS
@@ -40,6 +43,8 @@ Amazon Simple Notification Service (SNS) to send SMS.
 5. Enable the integration
 
 To get SMS notifications select newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
+
+Please note that in order to send SMS, phone numbers must consist of a "+" character and eleven digits (including the country code) or ten digits, then the country code equal to +1 will be added to the phone number. The phone number allows the use of characters "(", ")", "-".
 
 Example of settings.json
 
