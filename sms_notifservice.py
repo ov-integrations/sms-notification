@@ -129,9 +129,9 @@ class SmsNotifService(NotificationService):
         return phone_number
     
     def _format_phone_number(self, phone_number):
-        formatted_phone_number  = phone_number.replace('-', '')
-        formatted_phone_number = formatted_phone_number.replace('(', '').replace(')', '')
-        if formatted_phone_number[0] != '+':
+        formatted_phone_number  = phone_number.replace("-", "")
+        formatted_phone_number = formatted_phone_number.replace("(", "").replace(")", "")
+        if formatted_phone_number[0] != "+":
             formatted_phone_number = "+1" + formatted_phone_number
             self._integrationLog.add(LogLevel.WARNING,
                                      "Warning! +1 prefix added to phone number. Final value: [{}]".format(formatted_phone_number))
@@ -139,7 +139,7 @@ class SmsNotifService(NotificationService):
         return formatted_phone_number
     
     def _check_phone_number(self, phone_number, formatted_phone_number):
-        if re.fullmatch('\+\d{2,15}', formatted_phone_number) is None:
+        if re.fullmatch("\+\d{2,15}", formatted_phone_number) is None:
             self._integrationLog.add(LogLevel.ERROR,
                                      "Incorrect Phone Number format.",
                                      "Original Phone Number: [{0}]\nProcessed Phone Number: [{1}]".format(phone_number, formatted_phone_number))
