@@ -62,6 +62,7 @@ class SmsNotifService(NotificationService):
             msg = msg + " " + attachments
 
         phone_number = self._format_phone_number(notif_queue_record.phone_number)
+        self._check_phone_number(notif_queue_record.phone_number, phone_number)
 
         self._integrationLog.add(LogLevel.INFO,
                                  "Sending SMS to [{}] phone number".format(phone_number),
@@ -128,19 +129,21 @@ class SmsNotifService(NotificationService):
         return phone_number
     
     def _format_phone_number(self, phone_number):
-        original_phone_number = phone_number
-        phone_number = original_phone_number.replace('-', '')
-        phone_number = phone_number.replace('(', '').replace(')', '')
-        if phone_number[0] != '+':
-            phone_number = "+1" + phone_number
-
-        if re.fullmatch('\+\d{11}', phone_number) is None:
+        formatted_phone_number  = phone_number.replace('-', '')
+        formatted_phone_number = formatted_phone_number.replace('(', '').replace(')', '')
+        if formatted_phone_number[0] != '+':
+            formatted_phone_number = "+1" + formatted_phone_number
+            self._integrationLog.add(LogLevel.WARNING,
+                                     "Warning! +1 prefix added to phone number. Final value: [{}]".format(formatted_phone_number))
+        
+        return formatted_phone_number
+    
+    def _check_phone_number(self, phone_number, formatted_phone_number):
+        if re.fullmatch('\+\d{2,15}', formatted_phone_number) is None:
             self._integrationLog.add(LogLevel.ERROR,
                                      "Incorrect Phone Number format.",
-                                     "Original Phone Number: [{0}]\nProcessed Phone Number: [{1}]".format(original_phone_number, phone_number))
-            raise Exception("Incorrect Phone Number format. Phone Number: [{}]".format(original_phone_number))
-        
-        return phone_number
+                                     "Original Phone Number: [{0}]\nProcessed Phone Number: [{1}]".format(phone_number, formatted_phone_number))
+            raise Exception("Incorrect Phone Number format. Phone Number: [{}]".format(phone_number))
 
 class UserTrackor:
 

@@ -25,7 +25,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
    * ADMIN_USERS R
    * ADMIN_INTEGRATION_LOG RA
    
-   Required privs if phoneNumberField is used:
+   The following privs are required if phoneNumberField is used:
    * \<User Trackor Type\> R
    * \<User Trackor Type Tab containing phoneNumberField\> R
 
@@ -44,7 +44,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
 
 To get SMS notifications select newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
 
-Please note that in order to send SMS, phone numbers must consist of a "+" character and eleven digits (including the country code) or ten digits, then the country code equal to +1 will be added to the phone number. The phone number allows the use of characters "(", ")", "-".
+Please note that in order to send SMS, phone numbers must consist of a "+" character and no more than 15 digits (including the country code) or no more than 14 digits, then the country code equal to +1 will be added to the phone number. The phone number allows the use of characters "(", ")", "-".
 
 Example of settings.json
 
