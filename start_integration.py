@@ -11,11 +11,11 @@ from integration_error import IntegrationError
 with open("settings.json", "rb") as settings_file:
     settings_json = json.loads(settings_file.read().decode("utf-8"))
 
-with open('settings_schema.json', "rb") as SFile:
-    data_schema = json.loads(SFile.read().decode('utf-8'))
+with open("settings_schema.json", "rb") as settings_schema_file:
+    settings_schema_json = json.loads(settings_schema_file.read().decode("utf-8"))
 
 try:
-    validate(instance=settings_json, schema=data_schema)
+    validate(instance=settings_json, schema=settings_schema_json)
 except Exception as e:
     raise IntegrationError("Incorrect value in the settings file\n{}".format(str(e)))
 
