@@ -34,7 +34,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
    - oneVizionLogin - OneVizion Login
    - oneVizionPwd - OneVizion Password
    - serviceId - ID of the Notification Service created at step 2
-   - phoneNumberField (Optional. Needed when there are no phones numbers in User Settings) - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record.
+   - phoneNumberField (Optional. When phone number from the Field should be used instead of one specified in the User Settings) - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record.
    - awsAccessKeyId - AWS Access Key ID
    - awsSecretAccessKey - AWS Secret Access Key
    - maxAttempts - The number of attempts to send SMS
@@ -44,7 +44,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
 
 To get SMS notifications select newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
 
-Please note that in order to send SMS, phone numbers must consist of a "+" character and no more than 15 digits (including the country code) or no more than 14 digits, then the country code equal to +1 will be added to the phone number. The phone number allows the use of characters "(", ")", "-".
+Please note that in order to send SMS, phone number must start with a "+" character and contain no more than 15 digits. If the "+" character is omitted, "+1" will be added automatically. The phone number allows the use of characters "(", ")", "-".
 
 Example of settings.json
 
