@@ -18,6 +18,8 @@ try:
     validate(instance=settings_json, schema=settings_schema_json)
 except Exception as e:
     raise IntegrationError("Incorrect value in the settings file\n{}".format(str(e)))
+    
+phone_number_field = settings_json["phoneNumberField"] if "phoneNumberField" in settings_json else ""
 
 with open("ihub_parameters.json", "rb") as ihub_params_file:
     ihub_params_json = json.loads(ihub_params_file.read().decode("utf-8"))
@@ -26,7 +28,7 @@ notification_service = SmsNotifService(settings_json["serviceId"],
                                        settings_json["oneVizionUrl"], 
                                        settings_json["oneVizionLogin"],
                                        settings_json["oneVizionPwd"],
-                                       settings_json["phoneNumberField"],
+                                       phone_number_field,
                                        settings_json["awsAccessKeyId"],
                                        settings_json["awsSecretAccessKey"],
                                        settings_json["awsRegion"], 
