@@ -1,3 +1,4 @@
+import re
 import boto3
 from onevizion import NotificationService, LogLevel, HTTPBearerAuth
 
@@ -60,12 +61,8 @@ class SmsNotifService(NotificationService):
         if len(notif_queue_record.blobDataIds) > 0:
             msg = msg + " " + attachments
 
-        # Clean up phone number
-        phone_number = notif_queue_record.phone_number
-        phone_number = phone_number.replace('-', '')
-        phone_number = phone_number.replace('(', '').replace(')', '')
-        if phone_number[0] != '+':
-            phone_number = "+1" + phone_number
+        phone_number = self._format_phone_number(notif_queue_record.phone_number)
+        self._check_phone_number(notif_queue_record.phone_number, phone_number)
 
         self._integrationLog.add(LogLevel.INFO,
                                  "Sending SMS to [{}] phone number".format(phone_number),
@@ -108,23 +105,45 @@ class SmsNotifService(NotificationService):
             user_ids = [user_id for user_id in user_ids if user_id]
 
         if len(user_ids) > 0:
-            users = self._user_trackor.get_users_by_ids(user_ids)
+            users = dict((user["userId"], user) for user in self._user_trackor.get_users_by_ids(user_ids))
 
             for notif_queue_rec in notif_queue:
-                for user in users:
-                    tid = user["trackorId"]
-                    if notif_queue_rec.userId == user["userId"]:
-                        notif_queue_rec.trackor_id = tid
-                        try:
-                            notif_queue_rec.phone_number = self._user_trackor.get_phone_number_by_field_name_and_trackor_id(
-                                self._phone_number_field_name,
-                                tid)
-                        except Exception as e:
-                            self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. Notif "
-                                                                     "Queue ID = [{}]".format(str(notif_queue_rec.notifQueueId)), str(e))
+                if notif_queue_rec.userId is not None:
+                    notif_queue_rec.phone_number = self._get_phone_number(users[notif_queue_rec.userId])
 
         return notif_queue
 
+    def _get_phone_number(self, user):
+        if self._phone_number_field_name:
+            try:
+                phone_number = self._user_trackor.get_phone_number_by_field_name_and_trackor_id(
+                    self._phone_number_field_name,
+                    user["trackorId"])
+            except Exception as e:
+                self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. "
+                                                         "Trackor ID = [{}]".format(str(user["trackorId"])),
+                                        str(e))
+        else:
+            phone_number = user["phoneNumber"]
+
+        return phone_number
+    
+    def _format_phone_number(self, phone_number):
+        formatted_phone_number  = phone_number.replace("-", "")
+        formatted_phone_number = formatted_phone_number.replace("(", "").replace(")", "")
+        if formatted_phone_number[0] != "+":
+            formatted_phone_number = "+1" + formatted_phone_number
+            self._integrationLog.add(LogLevel.WARNING,
+                                     "Warning! +1 prefix added to phone number. Final value: [{}]".format(formatted_phone_number))
+        
+        return formatted_phone_number
+    
+    def _check_phone_number(self, phone_number, formatted_phone_number):
+        if re.fullmatch("\+\d{2,15}", formatted_phone_number) is None:
+            self._integrationLog.add(LogLevel.ERROR,
+                                     "Incorrect Phone Number format.",
+                                     "Original Phone Number: [{0}]\nProcessed Phone Number: [{1}]".format(phone_number, formatted_phone_number))
+            raise Exception("Incorrect Phone Number format. Phone Number: [{}]".format(phone_number))
 
 class UserTrackor:
 
