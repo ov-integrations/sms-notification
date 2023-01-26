@@ -1,0 +1,60 @@
+{
+    "type" : "object",
+    "properties" : {
+        "oneVizionUrl" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+        "oneVizionLogin" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+        "oneVizionPwd" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+        "serviceId" : {
+            "type" : "integer",
+            "multipleOf" : 1
+        },
+        "phoneNumberField" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+
+        "awsAccessKeyId" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+        "awsSecretAccessKey" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+        "awsRegion" : {
+            "type" : "string",
+            "minLength" : 1
+        },
+
+        "maxAttempts" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 20,
+            "multipleOf" : 1
+        },
+        "nextAttemptDelay" : {
+            "type" : "integer",
+            "minimum" : 1,
+            "maximum" : 120,
+            "multipleOf" : 1
+        }
+    },
+    "required": [
+        "oneVizionUrl",
+        "oneVizionLogin",
+        "oneVizionPwd",
+        "serviceId",
+        "awsAccessKeyId",
+        "awsSecretAccessKey",
+        "awsRegion"
+    ]
+}
