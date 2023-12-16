@@ -2,5 +2,6 @@ command = python3 start_integration.py
 settings_file_name = settings.json
 default_schedule = 0 */5 * * * ?
 read_from_stdout = false
+1.0 = [22.6.0,)
 1.1 = [22.6.0,)
 2.0 = [22.6.0,)
