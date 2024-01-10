@@ -1,2 +1,0 @@
-class IntegrationError(Exception):
-    pass

@@ -6,7 +6,7 @@ subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "python_dep
 import json
 from jsonschema import validate
 from sms_notifservice import SmsNotifService
-from integration_error import IntegrationError
+from module_error import ModuleError
 
 with open("settings.json", "rb") as settings_file:
     settings_json = json.loads(settings_file.read().decode("utf-8"))
@@ -17,7 +17,7 @@ with open("settings_schema.json", "rb") as settings_schema_file:
 try:
     validate(instance=settings_json, schema=settings_schema_json)
 except Exception as e:
-    raise IntegrationError("Incorrect value in the settings file\n{}".format(str(e)))
+    raise ModuleError("Incorrect value in the settings file\n{}".format(str(e)))
     
 phone_number_field = settings_json["phoneNumberField"] if "phoneNumberField" in settings_json else ""
 

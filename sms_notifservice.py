@@ -1,7 +1,7 @@
 import re
 import boto3
 from onevizion import NotificationService, LogLevel, HTTPBearerAuth
-
+from module_error import ModuleError
 from curl import Curl
 
 HTTPS = "https://"
@@ -50,7 +50,7 @@ class SmsNotifService(NotificationService):
 
     def sendNotification(self, notif_queue_record):
         if not (hasattr(notif_queue_record, 'phone_number')) or notif_queue_record.phone_number is None:
-            raise Exception(
+            raise ModuleError(
                 "Notif Queue Record with ID [{}] has no phone number".format(notif_queue_record.notifQueueId))
 
         attachments = "Attachments: "
@@ -86,13 +86,13 @@ class SmsNotifService(NotificationService):
             http_status_code = int(response["ResponseMetadata"]["HTTPStatusCode"])
         except Exception as e:
             self._integrationLog.add(LogLevel.ERROR, "Incorrect response from SNS", response)
-            raise Exception("Incorrect response from SNS") from e
+            raise ModuleError("Incorrect response from SNS") from e
 
         if http_status_code >= 400:
             self._integrationLog.add(LogLevel.ERROR,
                                      "Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code),
                                      "Response: [{}]".format(response))
-            raise Exception("Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code))
+            raise ModuleError("Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code))
 
     def _prepareNotifQueue(self, notif_queue):
         user_ids = list(map(lambda rec: rec.userId, notif_queue))
@@ -143,7 +143,7 @@ class SmsNotifService(NotificationService):
             self._integrationLog.add(LogLevel.ERROR,
                                      "Incorrect Phone Number format.",
                                      "Original Phone Number: [{0}]\nProcessed Phone Number: [{1}]".format(phone_number, formatted_phone_number))
-            raise Exception("Incorrect Phone Number format. Phone Number: [{}]".format(phone_number))
+            raise ModuleError("Incorrect Phone Number format. Phone Number: [{}]".format(phone_number))
 
 class UserTrackor:
 
@@ -156,7 +156,7 @@ class UserTrackor:
         url = self._url + "/api/v3/trackors/" + str(tid) + "?fields=" + field_name
         curl = Curl('GET', url, headers=self._headers, auth=self._auth)
         if len(curl.errors) > 0:
-            raise Exception(curl.errors)
+            raise ModuleError(curl.errors)
         return curl.jsonData[field_name]
 
     def get_users_by_ids(self, user_ids):
@@ -166,7 +166,7 @@ class UserTrackor:
 
         curl = Curl('GET', url, headers=self._headers, auth=self._auth)
         if len(curl.errors) > 0:
-            raise Exception(curl.errors)
+            raise ModuleError(curl.errors)
         return curl.jsonData
 
 
