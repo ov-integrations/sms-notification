@@ -25,9 +25,9 @@ with open("ihub_parameters.json", "rb") as ihub_params_file:
     ihub_params_json = json.loads(ihub_params_file.read().decode("utf-8"))
 
 notification_service = SmsNotifService(settings_json["serviceId"],
-                                       settings_json["oneVizionUrl"], 
-                                       settings_json["oneVizionLogin"],
-                                       settings_json["oneVizionPwd"],
+                                       settings_json["ovUrl"], 
+                                       settings_json["ovAccessKey"],
+                                       settings_json["ovSecretKey"],
                                        phone_number_field,
                                        settings_json["awsAccessKeyId"],
                                        settings_json["awsSecretAccessKey"],
