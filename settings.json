@@ -1,7 +1,7 @@
 {
-    "oneVizionUrl" : "",
-    "oneVizionLogin" : "",
-    "oneVizionPwd" : "",
+    "ovUrl" : "",
+    "ovAccessKey" : "",
+    "ovSecretKey" : "",
     "serviceId" : ,
     "phoneNumberField" : "",
     "awsAccessKeyId" : "",

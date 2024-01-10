@@ -1,17 +1,19 @@
 {
     "type" : "object",
     "properties" : {
-        "oneVizionUrl" : {
+        "ovUrl" : {
             "type" : "string",
             "minLength" : 1
         },
-        "oneVizionLogin" : {
+        "ovAccessKey" : {
             "type" : "string",
-            "minLength" : 1
+            "minLength" : 20,
+            "maxLength" : 20
         },
-        "oneVizionPwd" : {
+        "ovSecretKey" : {
             "type" : "string",
-            "minLength" : 1
+            "minLength" : 70,
+            "maxLength" : 70
         },
         "serviceId" : {
             "type" : "integer",
@@ -49,9 +51,9 @@
         }
     },
     "required": [
-        "oneVizionUrl",
-        "oneVizionLogin",
-        "oneVizionPwd",
+        "ovUrl",
+        "ovAccessKey",
+        "ovSecretKey",
         "serviceId",
         "awsAccessKeyId",
         "awsSecretAccessKey",

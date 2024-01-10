@@ -30,9 +30,9 @@ Amazon Simple Notification Service (SNS) to send SMS.
    * \<User Trackor Type Tab containing phoneNumberField\> R
 
 4. Fill the integration settings file:
-   - oneVizionUrl - OneVizion URL
-   - oneVizionLogin - OneVizion Login
-   - oneVizionPwd - OneVizion Password
+   - ovUrl - OneVizion URL
+   - ovAccessKey - OneVizion Access Key
+   - ovSecretKey - OneVizion Secret Key
    - serviceId - ID of the Notification Service created at step 2
    - phoneNumberField (Optional. When phone number from the Field should be used instead of one specified in the User Settings) - The name of the field which contains the phone number of the recipient. Recipient is a user trackor related with User ID from the Notif Queue record.
    - awsAccessKeyId - AWS Access Key ID
@@ -50,9 +50,9 @@ Example of settings.json
 
 ```json
 {
-    "oneVizionUrl" : "test.onevizion.com",
-    "oneVizionLogin" : "username",
-    "oneVizionPwd" : "*****",
+    "ovUrl" : "test.onevizion.com",
+    "ovAccessKey" : "*****",
+    "ovSecretKey" : "*****",
     "serviceId" : 1000043,
     "phoneNumberField" : "U_PHONE_NUMBER",
     "awsAccessKeyId" : "*****",
