@@ -30,7 +30,6 @@ Amazon Simple Notification Service (SNS) to send SMS.
    * \<User Trackor Type Tab containing phoneNumberField\> R
 
 4. Fill the integration settings file:
-   - ovUrl - OneVizion URL
    - ovAccessKey - OneVizion Access Key
    - ovSecretKey - OneVizion Secret Key
    - serviceId - ID of the Notification Service created at step 2
@@ -50,7 +49,6 @@ Example of settings.json
 
 ```json
 {
-    "ovUrl" : "test.onevizion.com",
     "ovAccessKey" : "*****",
     "ovSecretKey" : "*****",
     "serviceId" : 1000043,
