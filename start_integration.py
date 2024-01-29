@@ -24,6 +24,9 @@ phone_number_field = settings_json["phoneNumberField"] if "phoneNumberField" in 
 with open("ihub_parameters.json", "rb") as ihub_params_file:
     ihub_params_json = json.loads(ihub_params_file.read().decode("utf-8"))
 
+# settings_json["ovUrl"] is left for local testing using http://
+ov_url = settings_json["ovUrl"] if "ovUrl" in settings_json else ihub_params_json["ovUrl"]
+
 notification_service = SmsNotifService(settings_json["serviceId"],
                                        ihub_params_json["ovUrl"], 
                                        settings_json["ovAccessKey"],
