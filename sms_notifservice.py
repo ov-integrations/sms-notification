@@ -37,7 +37,7 @@ class SmsNotifService(NotificationService):
 
     def _create_client(self, access_key_id, secret_access_key, aws_region):
         if aws_region == "test":
-            self._integrationLog.add(LogLevel.WARNING,
+            self._moduleLog.add(LogLevel.WARNING,
                                      "Warning! The stub is used instead of the real client for sending SMS")
             return StubClient()
         else:
@@ -64,7 +64,7 @@ class SmsNotifService(NotificationService):
         phone_number = self._format_phone_number(notif_queue_record.phone_number)
         self._check_phone_number(notif_queue_record.phone_number, phone_number)
 
-        self._integrationLog.add(LogLevel.INFO,
+        self._moduleLog.add(LogLevel.INFO,
                                  "Sending SMS to [{}] phone number".format(phone_number),
                                  "Message Text: [{}]".format(msg))
         # Send your sms message.
@@ -79,17 +79,17 @@ class SmsNotifService(NotificationService):
             }
         )
 
-        self._integrationLog.add(LogLevel.DEBUG,
+        self._moduleLog.add(LogLevel.DEBUG,
                                  "Received response from SNS",
                                  "Response: [{}]".format(response))
         try:
             http_status_code = int(response["ResponseMetadata"]["HTTPStatusCode"])
         except Exception as e:
-            self._integrationLog.add(LogLevel.ERROR, "Incorrect response from SNS", response)
+            self._moduleLog.add(LogLevel.ERROR, "Incorrect response from SNS", response)
             raise ModuleError("Incorrect response from SNS") from e
 
         if http_status_code >= 400:
-            self._integrationLog.add(LogLevel.ERROR,
+            self._moduleLog.add(LogLevel.ERROR,
                                      "Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code),
                                      "Response: [{}]".format(response))
             raise ModuleError("Error when sending SMS. HTTPStatusCode: [{}]".format(http_status_code))
@@ -99,7 +99,7 @@ class SmsNotifService(NotificationService):
         if None in user_ids:
             for notif_queue_rec in notif_queue:
                 if notif_queue_rec.userId is None:
-                    self._integrationLog.add(LogLevel.ERROR,
+                    self._moduleLog.add(LogLevel.ERROR,
                                              "Notif Queue Record doesn't have User ID. Notif Queue ID: [{}]".format(
                                                  str(notif_queue_rec.notifQueueId)))
             user_ids = [user_id for user_id in user_ids if user_id]
@@ -120,7 +120,7 @@ class SmsNotifService(NotificationService):
                     self._phone_number_field_name,
                     user["trackorId"])
             except Exception as e:
-                self._integrationLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. "
+                self._moduleLog.add(LogLevel.ERROR, "Can't get Phone Number from User Trackor. "
                                                          "Trackor ID = [{}]".format(str(user["trackorId"])),
                                         str(e))
         else:
@@ -133,14 +133,14 @@ class SmsNotifService(NotificationService):
         formatted_phone_number = formatted_phone_number.replace("(", "").replace(")", "")
         if formatted_phone_number[0] != "+":
             formatted_phone_number = "+1" + formatted_phone_number
-            self._integrationLog.add(LogLevel.WARNING,
+            self._moduleLog.add(LogLevel.WARNING,
                                      "Warning! +1 prefix added to phone number. Final value: [{}]".format(formatted_phone_number))
         
         return formatted_phone_number
     
     def _check_phone_number(self, phone_number, formatted_phone_number):
         if re.fullmatch("\+\d{2,15}", formatted_phone_number) is None:
-            self._integrationLog.add(LogLevel.ERROR,
+            self._moduleLog.add(LogLevel.ERROR,
                                      "Incorrect Phone Number format.",
                                      "Original Phone Number: [{0}]\nProcessed Phone Number: [{1}]".format(phone_number, formatted_phone_number))
             raise ModuleError("Incorrect Phone Number format. Phone Number: [{}]".format(phone_number))
