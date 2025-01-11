@@ -1,6 +1,6 @@
 # sms-notification
 
-SMS-Notification is an integration that works as an external Notification Service for sending SMS notifications. It uses 
+SMS-Notification is a module that works as an external Notification Service for sending SMS notifications. It uses 
 Amazon Simple Notification Service (SNS) to send SMS.
 
 ## Requirements
@@ -17,13 +17,13 @@ Amazon Simple Notification Service (SNS) to send SMS.
 
 
 ## Usage
-1. Create a new Notification Service in OneVizion. All settings of this service are ignored by Integration, use random values for required fields
-2. Install this integration
-3. Create dedicated account for integration with following privs:
+1. Create a new Notification Service in OneVizion. All settings of this service are ignored by the Module, use random values for required fields
+2. Install this Module
+3. Create a dedicated account for integration with the following privs:
    * WEB_SERVICES R
    * ADMIN_NOTIF_QUEUE RE
    * ADMIN_USERS R
-   * ADMIN_INTEGRATION_LOG RA
+   * ADMIN_MODULE_LOG RA
    
    The following privs are required if phoneNumberField is used:
    * \<User Trackor Type\> R
@@ -42,7 +42,7 @@ Amazon Simple Notification Service (SNS) to send SMS.
    - awsRegion - AWS Region. [AWS SNS Regions](https://docs.aws.amazon.com/sns/latest/dg/sns-supported-regions-countries.html)
 5. Enable the integration
 
-To get SMS notifications select newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
+To get SMS notifications select the newly created Notification Service in "Notif Service" drop-down on Notification admin form. OneVizion URL is automatically added to the end of the message for clarity.
 
 Please note that in order to send SMS, phone number must start with a "+" character and contain no more than 15 digits. If the "+" character is omitted, "+1" will be added automatically. The phone number allows the use of characters "(", ")", "-".
 
